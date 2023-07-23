@@ -8,25 +8,39 @@ const sizes = {
 
 const main = () => {
   // scene = camera + object inside
-  const scene = new THREE.Scene()
-  const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height)
-  camera.position.z = 3
-  scene.add(camera)
-
-  const geometry = new THREE.BoxGeometry(1,1,1)
-  const material = new THREE.MeshBasicMaterial({
-    color: 'red'
-  })
   // object (mesh) = geometry + material
-  const mesh = new THREE.Mesh(geometry, material)
+  const scene = new THREE.Scene()
+  
+  const mesh = new THREE.Mesh(
+    new THREE.BoxGeometry(1,1,1,5,5,5),
+    new THREE.MeshBasicMaterial({ color: 'red' })
+  )
   scene.add(mesh)
+
+  const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height)
+  camera.position.x = 2
+  camera.position.y = 2
+  camera.position.z = 2
+  camera.lookAt(mesh.position)
+  scene.add(camera)
 
   // need a renderer to render scene to html
   const renderer = new THREE.WebGLRenderer({
     canvas: document.querySelector('.webgl')
   })
   renderer.setSize(sizes.width, sizes.height)
-  renderer.render(scene, camera)
+
+  const clock = new THREE.Clock()
+
+  const tick = () => {
+    const delta = clock.getDelta()
+    mesh.rotation.x += delta
+    mesh.rotation.y += delta
+    mesh.rotation.z += delta
+    renderer.render(scene, camera);
+    window.requestAnimationFrame(tick)
+  }
+  tick()
 }
 
 main()
