@@ -33,10 +33,10 @@ const main = () => {
   const clock = new THREE.Clock()
 
   const tick = () => {
-    const delta = clock.getDelta()
-    mesh.rotation.x += delta
-    mesh.rotation.y += delta
-    mesh.rotation.z += delta
+    const elapsedTime = clock.getElapsedTime()
+    mesh.rotation.x = elapsedTime
+    mesh.rotation.y = elapsedTime
+    mesh.rotation.z = elapsedTime
     renderer.render(scene, camera);
     window.requestAnimationFrame(tick)
   }
