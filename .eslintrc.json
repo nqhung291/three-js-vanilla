@@ -14,5 +14,8 @@
     "ecmaFeatures": {
       "jsx": false
     }
+  },
+  "rules": {
+    "no-unused-vars": "warn"
   }
 }
