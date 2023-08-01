@@ -10,23 +10,7 @@ const cursor = {
 
 const main = () => {
   // scene = camera + object inside
-  // object (mesh) = geometry + material
-  const canvas = document.querySelector('.webgl');
-  const renderer = new THREE.WebGLRenderer({
-    canvas,
-  });
-  renderer.setSize(sizes.width, sizes.height);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
   const scene = new THREE.Scene();
-
-  const mesh = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1, 5, 5, 5),
-    new THREE.MeshBasicMaterial({ color: 'red' }),
-  );
-  scene.add(mesh);
-
-  const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
   // const camera = new THREE.OrthographicCamera(
   //   -1 * aspectRatio,
   //   1 * aspectRatio,
@@ -37,9 +21,40 @@ const main = () => {
   // );
   // camera.position.x = 2;
   // camera.position.y = 2;
+  // camera.lookAt(mesh.position);
+  const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
   camera.position.z = 3;
   scene.add(camera);
-  // camera.lookAt(mesh.position);
+
+  // object (mesh) = geometry + material
+  const canvas = document.querySelector('.webgl');
+  const renderer = new THREE.WebGLRenderer({
+    canvas,
+  });
+  renderer.setSize(sizes.width, sizes.height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  const boxGeometry = new THREE.BoxGeometry(2, 2, 2, 2, 2, 2);
+  const count = 100;
+  // const positions = new Float32Array([0, 0, 0, 0, 1, 0, 1, 0, 0]);
+  let positions = new Float32Array(
+    [...Array(count * 3 * 3).keys()].map(() => 2 * (Math.random() - 0.5)),
+  );
+  const positionAttributes = new THREE.BufferAttribute(positions, 3);
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', positionAttributes);
+
+  const material = new THREE.MeshBasicMaterial({
+    color: 'green',
+    wireframe: true,
+  });
+  const boxMaterial = new THREE.MeshBasicMaterial({
+    color: 'yellow',
+    wireframe: true,
+  });
+  const mesh = new THREE.Mesh(geometry, material);
+  const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
+  scene.add(mesh, boxMesh);
 
   const control = new OrbitControls(camera, canvas);
   control.enableDamping = true;
