@@ -1,12 +1,15 @@
 import './style.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import GUI from 'lil-gui';
+import gsap from 'gsap';
 
 const sizes = { width: window.innerWidth, height: window.innerHeight };
 const cursor = {
   x: 0,
   y: 0,
 };
+const gui = new GUI();
 
 const main = () => {
   // scene = camera + object inside
@@ -58,6 +61,28 @@ const main = () => {
 
   const control = new OrbitControls(camera, canvas);
   control.enableDamping = true;
+
+  const parameters = {
+    spin: () => {
+      gsap.to(boxMesh.rotation, {
+        duration: 1,
+        x: boxMesh.rotation.x + Math.PI * 2,
+        y: boxMesh.rotation.y - Math.PI * 2,
+      });
+      gsap.to(mesh.rotation, {
+        duration: 1,
+        z: mesh.rotation.z + Math.PI * 2,
+      });
+    },
+  };
+  gui.add(mesh.position, 'x', -3, 3, 0.01);
+  gui.add(mesh.position, 'y', -3, 3, 0.01);
+  gui.add(mesh.position, 'z', -3, 3, 0.01);
+  gui.add(mesh, 'visible');
+  gui.add(mesh.material, 'wireframe');
+  gui.addColor(material, 'color');
+  gui.addColor(boxMaterial, 'color').name('boxColor');
+  gui.add(parameters, 'spin');
 
   window.addEventListener('mousemove', (e) => {
     cursor.x = e.clientX / sizes.width - 0.5;
