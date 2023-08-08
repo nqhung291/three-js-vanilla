@@ -47,6 +47,23 @@ const main = () => {
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute('position', positionAttributes);
 
+  const loadingManager = new THREE.LoadingManager(
+    () => {
+      console.log('on loaded');
+    },
+    () => {
+      console.log('on progress');
+    },
+    () => {
+      console.log('on error');
+    },
+  );
+  const textureLoader = new THREE.TextureLoader(loadingManager);
+  const texture = textureLoader.load('/textures/door/color.jpg');
+
+  const textureMaterial = new THREE.MeshBasicMaterial({
+    map: texture,
+  });
   const material = new THREE.MeshBasicMaterial({
     color: 'green',
     wireframe: true,
@@ -55,6 +72,7 @@ const main = () => {
     color: 'yellow',
     wireframe: true,
   });
+
   const mesh = new THREE.Mesh(geometry, material);
   const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
   scene.add(mesh, boxMesh);
