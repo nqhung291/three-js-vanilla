@@ -11,7 +11,10 @@ const parameters = {
   materialColor: '#ffeded',
 };
 
-gui.addColor(parameters, 'materialColor');
+gui.addColor(parameters, 'materialColor').onChange((color) => {
+  material.color.set(color);
+  particlesMaterial.color.set(color);
+});
 
 /**
  * Base
